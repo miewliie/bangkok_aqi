@@ -2,8 +2,8 @@ name: Tweet workflow
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "5 */3 * * *"
+  schedule:
+    - cron: "5 */3 * * *"
 
 jobs:
   tweeting:
@@ -25,6 +25,7 @@ jobs:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
           EMAIL_FOR_ISSUE: ${{ secrets.EMAIL_FOR_ISSUE }}
+          AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
 
       - name: Commit and push if any change
         run: |-
