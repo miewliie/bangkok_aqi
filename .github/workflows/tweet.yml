@@ -1,0 +1,36 @@
+name: Tweet workflow
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "5 */3 * * *"
+
+jobs:s
+  tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Set up twitter library
+        run: |-
+          cd /home/runner/work/bangkok-aqi/bangkok-aqi/aqi
+          composer require abraham/twitteroauth
+
+      - name: Tweet every day on every 3 hours 5 minutes.
+        run: cd /home/runner/work/bangkok-aqi/bangkok-aqi/aqi && php twitter.php
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+
+      - name: Commit and push if any change
+        run: |-
+          cd /home/runner/work/bangkok-aqi/bangkok-aqi/
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+          git add aqi/assets/data.json
+          timestamp=$(date -u)
+          git commit -m "Latest data: ${timestamp}" || exit 0
+          git push
