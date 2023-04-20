@@ -1,4 +1,4 @@
-name: AQI Toot workflow
+name: Toot workflow
 
 on:
   workflow_dispatch:
