@@ -2,8 +2,8 @@ name: Tweet workflow
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "5 */3 * * *"
+#   schedule:
+#     - cron: "5 */3 * * *"
 
 jobs:
   tweeting:
