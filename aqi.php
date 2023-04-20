@@ -104,7 +104,7 @@ function getMapAQI() {
 }
 
 function storeAQI($data) {
-  $fp = fopen(__DIR__.'/assets/data.json', 'w');
+  $fp = fopen('assets/data.json', 'w');
   fwrite($fp, json_encode($data));
   fclose($fp);
 }
@@ -188,7 +188,7 @@ function curl_get_contents($url) {
 
 // just parses the stored json and return the dictionary in it.
 function fetchOldAQIForMap() {
-  $url = __DIR__.'/assets/data.json';
+  $url = 'assets/data.json';
   return (array) json_decode(file_get_contents($url));
 }
 ?>

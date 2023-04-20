@@ -1,7 +1,7 @@
 twitteroauth/
-aqi/vendor
-aqi/composer.json
-aqi/composer.lock
+vendor
+composer.json
+composer.lock
 __pycache__
 .idea
 venv/

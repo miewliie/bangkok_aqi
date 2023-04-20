@@ -13,7 +13,7 @@ if (!is_numeric($aqi) || is_nan($aqi)) {
 }
 
 createMap();
-$mapFilePath = "./outputs/map.png";
+$mapFilePath = "outputs/map.png";
 $nameAndEmoji = nameFor($aqi);
 $statusDetails = statusFor($aqi);
 $thaiStatus = statusThFor($aqi);
@@ -29,7 +29,7 @@ $jsonData = [
       "map" => $mapFilePath
 ];
 
-$path = './outputs/aqi-outputs.json';
+$path = 'outputs/aqi-outputs.json';
 $jsonString = json_encode($jsonData, JSON_UNESCAPED_UNICODE);
 $fp = fopen($path, 'w');
 fwrite($fp, $jsonString);
