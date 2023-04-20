@@ -33,4 +33,4 @@ jobs:
           git add assets/data.json
           timestamp=$(date -u)
           git commit -m "[mstd] Latest data: ${timestamp}" || exit 0
-          git push origin impr-aqi
+          git push
