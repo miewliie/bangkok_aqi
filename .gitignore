@@ -1,0 +1,7 @@
+twitteroauth/
+aqi/vendor
+aqi/composer.json
+aqi/composer.lock
+__pycache__
+.idea
+venv/
