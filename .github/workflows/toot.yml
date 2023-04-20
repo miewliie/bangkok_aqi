@@ -1,0 +1,36 @@
+name: AQI Toot workflow
+
+on:
+  workflow_dispatch:
+#   schedule:
+#     - cron: "5 */3 * * *"
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update AQI data into Json file
+        run: cd /home/runner/work/bangkok-aqi/bangkok-aqi/aqi && php action.php
+
+      - name: Update AQI status and avatar into Mastodon
+        run: |-
+          cd /home/runner/work/bangkok-aqi/bangkok-aqi/aqi
+          pip3 install Mastodon.py
+          python3 mastodon_status.py
+        env:
+          MASTODON_EMAIL: ${{ secrets.MASTODON_EMAIL }}
+          MASTODON_PASSWORD: ${{ secrets.MASTODON_PASSWORD }}
+          MASTODON_SERVER: ${{ secrets.MASTODON_SERVER }}
+
+      - name: Commit and push if any change
+        run: |-
+          cd /home/runner/work/bangkok-aqi/bangkok-aqi/
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+          git add aqi/assets/data.json
+          timestamp=$(date -u)
+          git commit -m "[mstd] Latest data: ${timestamp}" || exit 0
+          git push origin impr-aqi
