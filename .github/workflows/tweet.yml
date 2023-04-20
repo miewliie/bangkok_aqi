@@ -24,6 +24,7 @@ jobs:
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          EMAIL_FOR_ISSUE: ${{ secrets.EMAIL_FOR_ISSUE }}
 
       - name: Commit and push if any change
         run: |-
