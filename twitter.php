@@ -27,7 +27,7 @@ setNewAvatarFor($aqi);
 
 function sendNewStatusFor($aqi) {
   createMap();
-  global $CONSUMER_KEY , $CONSUMER_SECRET , $ACCESS_TOKEN,  $ACCESS_TOKEN_SECRET;
+  global $CONSUMER_KEY , $CONSUMER_SECRET , $ACCESS_TOKEN,  $ACCESS_TOKEN_SECRET, $EMAIL_FOR_ISSUE;
   $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
   $connection->setTimeouts(10, 60);
   try {
@@ -44,7 +44,7 @@ function sendNewStatusFor($aqi) {
 }
 
 function setNewDisplayNameFor($aqi) {
-  global $CONSUMER_KEY , $CONSUMER_SECRET , $ACCESS_TOKEN,  $ACCESS_TOKEN_SECRET;
+  global $CONSUMER_KEY , $CONSUMER_SECRET , $ACCESS_TOKEN,  $ACCESS_TOKEN_SECRET, $EMAIL_FOR_ISSUE;
   $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
   $connection->setTimeouts(10, 60);
   try {
@@ -60,7 +60,7 @@ function setNewDisplayNameFor($aqi) {
 }
 
 function setNewAvatarFor($aqi) {
-  global $CONSUMER_KEY , $CONSUMER_SECRET , $ACCESS_TOKEN,  $ACCESS_TOKEN_SECRET;
+  global $CONSUMER_KEY , $CONSUMER_SECRET , $ACCESS_TOKEN,  $ACCESS_TOKEN_SECRET, $EMAIL_FOR_ISSUE;
   $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
   $connection->setTimeouts(10, 60);
   try {
