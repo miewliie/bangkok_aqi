@@ -6,7 +6,7 @@ on:
 #     - cron: "5 */3 * * *"
 
 jobs:
-  tweet:
+  tooting:
     runs-on: ubuntu-latest
 
     steps:
