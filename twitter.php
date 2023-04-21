@@ -1,10 +1,5 @@
 <?php
 require "vendor/autoload.php";
-require "aqi.php";
-require "status.php";
-require "painter.php";
-require "name.php";
-require "avatar.php";
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 
@@ -14,25 +9,28 @@ $CONSUMER_SECRET = getenv('CONSUMER_SECRET');
 $ACCESS_TOKEN = getenv('ACCESS_TOKEN');
 $ACCESS_TOKEN_SECRET = getenv('ACCESS_TOKEN_SECRET');
 
-
-$aqi = currentAQI();
-if (!is_numeric($aqi) || is_nan($aqi)) {
-  exit();
-}
+$aqi = getAQI();
 
 sendNewStatusFor($aqi);
 setNewDisplayNameFor($aqi);
 setNewAvatarFor($aqi);
 
+function getAQI(){
+  // Read the JSON file contents into a string
+  $json_string = file_get_contents('outputs/aqi-outputs.json');
+  // Parse the JSON string into a PHP object
+  $data = json_decode($json_string);
+  return $data;
+}
+
 function sendNewStatusFor($aqi) {
-  createMap();
   global $CONSUMER_KEY , $CONSUMER_SECRET , $ACCESS_TOKEN,  $ACCESS_TOKEN_SECRET;
   $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
   $connection->setTimeouts(10, 60);
   try {
     $media = $connection->upload('media/upload', ['media' => 'outputs/map.png']);
     echo " ** media: ", $media->media_id_string;
-    $parameters = ['lat' => 13.03886045, 'long' => 101.69978836, 'place_id' => "49c909a0270e8699", 'display_coordinates' => true, 'status' => statusFor($aqi), 'media_ids' => $media->media_id_string];
+    $parameters = ['lat' => 13.03886045, 'long' => 101.69978836, 'place_id' => "49c909a0270e8699", 'display_coordinates' => true, 'status' => $aqi->th_en_status, 'media_ids' => $media->media_id_string];
     $result = $connection->post('statuses/update', $parameters);
   } catch (Exception $e) {
     $to      = 'bangkok_aqi_issue@miewliie.dev';
@@ -48,7 +46,7 @@ function setNewDisplayNameFor($aqi) {
   $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
   $connection->setTimeouts(10, 60);
   try {
-    $parameters = ['name' => nameFor($aqi)];
+    $parameters = ['name' => $aqi->name];
     $result = $connection->post('account/update_profile', $parameters);
   } catch (Exception $e) {
     $to      = 'bangkok_aqi_issue@miewliie.dev';
@@ -64,7 +62,7 @@ function setNewAvatarFor($aqi) {
   $connection = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
   $connection->setTimeouts(10, 60);
   try {
-    $filename = avatarFor($aqi);
+    $filename = $aqi->avatar;
     $parameters = [
       'image' => base64_encode(file_get_contents($filename))
       ];
@@ -79,4 +77,5 @@ function setNewAvatarFor($aqi) {
     mail($to, $subject, $message);
   }
 }
+
 ?>
