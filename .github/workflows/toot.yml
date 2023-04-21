@@ -1,4 +1,4 @@
-name: Toot workflow
+name: Toot & Tweet workflow
 
 on:
   workflow_dispatch:
@@ -6,16 +6,26 @@ on:
     - cron: "5 */3 * * *"
 
 jobs:
-  tooting:
+  processing:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Update AQI data into Json file
+      - name: Get new AQI data and output to json file
         run: cd /home/runner/work/bangkok_aqi/bangkok_aqi/ && php action.php
 
-      - name: Update AQI status and avatar into Mastodon
+      - name: Commit and push changed from data.json 
+        run: |-
+          cd /home/runner/work/bangkok_aqi/bangkok_aqi/
+          git config user.name "Automated"
+          git config user.email "actions@users.noreply.github.com"
+          git add assets/data.json
+          timestamp=$(date -u)
+          git commit -m "[mstd] Latest data: ${timestamp}" || exit 0
+          git push
+
+      - name: Tooting
         run: |-
           cd /home/runner/work/bangkok_aqi/bangkok_aqi/
           pip3 install Mastodon.py
@@ -25,12 +35,17 @@ jobs:
           MASTODON_PASSWORD: ${{ secrets.MASTODON_PASSWORD }}
           MASTODON_SERVER: ${{ secrets.MASTODON_SERVER }}
 
-      - name: Commit and push if any change
+      - name: Set up twitter library
         run: |-
           cd /home/runner/work/bangkok_aqi/bangkok_aqi/
-          git config user.name "Automated"
-          git config user.email "actions@users.noreply.github.com"
-          git add assets/data.json
-          timestamp=$(date -u)
-          git commit -m "[mstd] Latest data: ${timestamp}" || exit 0
-          git push
+          composer require abraham/twitteroauth
+
+      - name: Tweeting
+        run: cd /home/runner/work/bangkok_aqi/bangkok_aqi/ && php twitter.php
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          EMAIL_FOR_ISSUE: ${{ secrets.EMAIL_FOR_ISSUE }}
+          AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
