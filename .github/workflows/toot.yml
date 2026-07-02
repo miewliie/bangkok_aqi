@@ -47,5 +47,9 @@ jobs:
           CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          TWITTER_BACKEND: ${{ vars.TWITTER_BACKEND }}
+          XQUIK_API_KEY: ${{ secrets.XQUIK_API_KEY }}
+          XQUIK_ACCOUNT: ${{ secrets.XQUIK_ACCOUNT }}
+          XQUIK_BASE_URL: ${{ vars.XQUIK_BASE_URL }}
           EMAIL_FOR_ISSUE: ${{ secrets.EMAIL_FOR_ISSUE }}
           AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
